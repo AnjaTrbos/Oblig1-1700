@@ -14,10 +14,35 @@
     <option >Chicago</option>
     <option >West side story</option>
 </select>
-<script >
+<h2 >antall biletter:</h2>
+<input type="text" id="antallBiletter" onchange="antallBiletter();"><br>
+
+<form id="kundeListe" >
+    Fornavn: <input type="text" name="fname"><br>
+    Etternavn: <input type="text" name="lname"><br>
+    Telefonnr: <input type="text" name="phone"><br>
+    Adresse: <input type="text" name="adress"><br>
+
+    <input type="button" onclick="addBuyers()" value="Kjop biletter">
+</form>
+<script type="application/javascript" >
     function chooseMovie (){
         alert("Movie choosen:" +document.getElementById("selectMovie").value);
     }
+    function antallBiletter(){
+        const strin1 = document.getElementById("antallBiletter").value;
+        const num1 = Number(strin1);
+        if (isNaN(num1) ){
+            alert("not a number");
+        }
+        else {
+            alert("Antall billeter valgt: " + num1);
+        }
+    }
+    function addBuyers() {
+        document.getElementById("kundeListe").submit();
+    }
+
 </script>
 </body>
 </html>
