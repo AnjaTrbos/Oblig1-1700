@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="no">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Kinobiletter</title>
+
 </head>
 <body>
-<h1> test for github</h1>
+<h1> Bestilling av kinobiletter</h1>
+<h2>Velg film:</h2>
+<select  id="selectMovie" onchange="chooseMovie()">
+    <option >Les Miserables</option>
+    <option >Mamma mia</option>
+    <option >Chicago</option>
+    <option >West side story</option>
+</select>
+<script >
+    function chooseMovie (){
+        alert("Movie choosen:" +document.getElementById("selectMovie").value);
+    }
+</script>
 </body>
 </html>
