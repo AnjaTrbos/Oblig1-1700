@@ -3,46 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <title>Kinobiletter</title>
-
 </head>
 <body>
 <h1> Bestilling av kinobiletter</h1>
 <h2>Velg film:</h2>
-<select  id="selectMovie" onchange="chooseMovie()">
-    <option >Les Miserables</option>
-    <option >Mamma mia</option>
-    <option >Chicago</option>
-    <option >West side story</option>
+<select id="selectMovie" onchange="chooseMovie()">
+    <option>Les Miserables</option>
+    <option>Mamma mia</option>
+    <option>Chicago</option>
+    <option>West side story</option>
 </select>
-<h2 >antall biletter:</h2>
+<h2>antall biletter:</h2>
 <input type="text" id="antallBiletter" onchange="antallBiletter();"><br>
 
-<form id="kundeListe" >
-    Fornavn: <input type="text" name="fname"><br>
-    Etternavn: <input type="text" name="lname"><br>
-    Telefonnr: <input type="text" name="phone"><br>
-    Adresse: <input type="text" name="adress"><br>
+<form id="kundeListe">
+    Fornavn: <input type="text" id="fname"><br>
+    Etternavn: <input type="text" id="lname"><br>
+    Telefonnr: <input type="text" id="phone"><br>
+    Adresse: <input type="text" id="adress"><br>
 
     <input type="button" onclick="addBuyers()" value="Kjop biletter">
 </form>
-<script type="application/javascript" >
-    function chooseMovie (){
-        alert("Movie choosen:" +document.getElementById("selectMovie").value);
+
+<!-- Container to display buyer information -->
+<div id="buyerInfoContainer"></div>
+
+<script type="application/javascript">
+    const buyersList = [];
+
+    function chooseMovie() {
+        alert("Movie chosen: " + document.getElementById("selectMovie").value);
     }
-    function antallBiletter(){
+
+    function antallBiletter() {
         const strin1 = document.getElementById("antallBiletter").value;
         const num1 = Number(strin1);
-        if (isNaN(num1) ){
+        if (isNaN(num1)) {
             alert("not a number");
-        }
-        else {
+        } else {
             alert("Antall billeter valgt: " + num1);
         }
     }
+
     function addBuyers() {
-        document.getElementById("kundeListe").submit();
+        let name = document.getElementById("fname").value;
+        let lname = document.getElementById("lname").value;
+        let phone = document.getElementById("phone").value;
+        let adress = document.getElementById("adress").value;
+
+        let person = {
+            name: name,
+            lname: lname,
+            phone: phone,
+            adress: adress
+        };
+
+        buyersList.push(person);
+
+        // Call visPersonRegister function after adding buyers
+        visPersonRegister();
     }
 
+    function visPersonRegister() {
+        let container = document.getElementById("buyerInfoContainer");
+        container.innerHTML = "<table><tr>" +
+            "<th>Name</th><th>Last Name</th><th>Adress</th><th>Phone</th>" +
+            "</tr>";
+
+        for (let person of buyersList) {
+            container.innerHTML += "<tr>" +
+                "<td>" + person.name + "</td>" +
+                "<td>" + person.lname + "</td>" +
+                "<td>" + person.adress + "</td>" +
+                "<td>" + person.phone + "</td>" +
+                "</tr>";
+        }
+        container.innerHTML += "</table>";
+    }
 </script>
 </body>
 </html>
