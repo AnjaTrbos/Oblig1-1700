@@ -1,186 +1,48 @@
 <!DOCTYPE html>
 <html lang="no">
-
 <head>
     <meta charset="UTF-8">
     <title>Kinobiletter</title>
-</head>
 
+</head>
 <body>
 <h1> Bestilling av kinobiletter</h1>
-<label for="selectMovie">Velg Film:</label>
-<select id="selectMovie" onchange="chooseMovie()">
-    <option disabled selected value="">Velg film </option>
-    <option>Les Miserables</option>
-    <option>Mamma mia</option>
-    <option>Chicago</option>
-    <option>West side story</option>
-</select> <br><br>
+<h2>Velg film:</h2>
+<select  id="selectMovie" onchange="chooseMovie()">
+    <option >Les Miserables</option>
+    <option >Mamma mia</option>
+    <option >Chicago</option>
+    <option >West side story</option>
+</select>
+<h2 >antall biletter:</h2>
+<input type="text" id="antallBiletter" onchange="antallBiletter();"><br>
 
-<label for="antallBiletter">Antall:</label>
-<input id="antallBiletter" type="number"><br>
+<form id="kundeListe" >
+    Fornavn: <input type="text" name="fname"><br>
+    Etternavn: <input type="text" name="lname"><br>
+    Telefonnr: <input type="text" name="phone"><br>
+    Adresse: <input type="text" name="adress"><br>
 
-<br>
-<form id="kundeListe">
-    <label for="fname">Fornavn:</label>
-    <input type="text" id="fname" onchange="validateName(this.value)">
-    <span id="feilNavn" style="color: red"></span><br>
-
-    <label for="lname">Etternavn:</label>
-    <input type="text" id="lname" onchange="validateLastName(this.value)">
-    <span id="feilEtternavn" style="color: red"></span><br>
-
-    <label for="phone">Telefonnr:</label>
-    <input type="text" id="phone" onchange="validatePhone(this.value)">
-    <span id="feilTelefon" style="color: red"></span><br>
-
-    <label for="adress">Adresse:</label>
-    <input type="text" id="adress" onchange="validateAdress(this.value)">
-    <span id="feilAdresse" style="color: red"></span><br>
-
-    <input type="button" onclick="addBuyers()" value="Kjop billetter"><br>
+    <input type="button" onclick="addBuyers()" value="Kjop biletter">
 </form>
-
-<h2>Alle billeter</h2>
-
-<div id="buyerInfoContainer"></div>
-
-<input type="button" onclick="deletePeople()" value="Slett alle biletter">
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" type="application/javascript"></script>
-
-<script type="text/javascript">
-    const buyersList = [];
-
-    function chooseMovie() {
-        alert("Movie chosen: " + document.getElementById("selectMovie").value);
+<script type="application/javascript" >
+    function chooseMovie (){
+        alert("Movie choosen:" +document.getElementById("selectMovie").value);
     }
-
+    function antallBiletter(){
+        const strin1 = document.getElementById("antallBiletter").value;
+        const num1 = Number(strin1);
+        if (isNaN(num1) ){
+            alert("not a number");
+        }
+        else {
+            alert("Antall billeter valgt: " + num1);
+        }
+    }
     function addBuyers() {
-        let name = document.getElementById("fname").value;
-        let lname = document.getElementById("lname").value;
-        let phone = document.getElementById("phone").value;
-        let adress = document.getElementById("adress").value;
-
-        // Validation
-        if (!validateName(name)) {
-            return;
-        }
-        if (!validateLastName(lname)) {
-            return;
-        }
-        if (!validatePhone(phone)) {
-            return;
-        }
-        if (!validateAdress(adress)) {
-            return;
-        }
-
-        let strin1 = document.getElementById("antallBiletter").value;
-        let num1 = Number(strin1);
-
-        if (isNaN(num1) || num1 <= 0) {
-            alert("Invalid number of tickets. Please enter a valid number.");
-            return;
-        }
-
-        let person = {
-            name: name,
-            lastname: lname,
-            phone: phone,
-            address: adress,
-            numTickets: num1
-        };
-
-        buyersList.push(person);
-
-        // Call visPersonRegister function after adding buyers
-        visPersonRegister();
-
-        // Clear input fields
-        document.getElementById("fname").value = "";
-        document.getElementById("lname").value = "";
-        document.getElementById("phone").value = "";
-        document.getElementById("adress").value = "";
-        document.getElementById("antallBiletter").value = "";
-
+        document.getElementById("kundeListe").submit();
     }
 
-    function validateName(fname) {
-        const regexp = /^[a-zA-ZæøåÆØÅ. \-]{2,20}$/;
-        const ok = regexp.test(fname);
-        if (!ok) {
-            $("#feilNavn").html("The name Must consist of 2 to 20 letters");
-            return false;
-        } else {
-            $("#feilNavn").html("");
-            return true;
-        }
-    }
-    function validateLastName(lname) {
-        const regexp = /^[a-zA-ZæøåÆØÅ. \-]{2,20}$/;
-        const ok = regexp.test(lname);
-        if (!ok) {
-            $("#feilEtternavn").html("The name Must consist of 2 to 20 letters");
-            return false;
-        } else {
-            $("#feilEtternavn").html("");
-            return true;
-        }
-    }
-    function validatePhone(phone) {
-        const regexp = /^[0-9+\s()-]{8,20}$/;
-        const ok = regexp.test(phone);
-        if (!ok) {
-            $("#feilTelefon").html("The phone number must contain 8 to 20 numbers");
-            return false;
-        } else {
-            $("#feilTelefon").html("");
-            return true;
-        }
-    }
-    function validateAdress(address) {
-        const regexp = /^[a-zA-Z0-9æøåÆØÅ. \-]{2,50}$/;
-        const ok = regexp.test(address);
-        if (!ok) {
-            $("#feilAdresse").html("The adress must have more than 2 letters and numbers");
-            return false;
-        } else {
-            $("#feilAdresse").html("");
-            return true;
-        }
-    }
-
-    function visPersonRegister() {
-        let container = document.getElementById("buyerInfoContainer");
-        let tableHtml = "<table><tr>" +
-            "<th>Name</th><th>Last Name</th><th>Address</th><th>Phone</th><th>Tickets</th>" +
-            "</tr>";
-
-        for (let person of buyersList) {
-            tableHtml += "<tr>" +
-                "<td>" + person.name + "</td>" +
-                "<td>" + person.lastname + "</td>" +
-                "<td>" + person.address + "</td>" +
-                "<td>" + person.phone + "</td>" +
-                "<td>" + person.numTickets + "</td>" +
-                "</tr>";
-        }
-
-        tableHtml += "</table>";
-        container.innerHTML = tableHtml;
-    }
-
-    function deletePeople() {
-        while (buyersList.length > 0) {
-            buyersList.pop();
-        }
-
-        // Update the displayed buyer information
-        visPersonRegister();
-    }
 </script>
-
 </body>
-
 </html>
