@@ -8,6 +8,7 @@
 
 <body>
 <h1> Bestilling av kinobiletter</h1>
+<!-- Dropdown for selecting movies -->
 <label for="selectMovie">Velg Film:</label>
 <select id="selectMovie" onchange="chooseMovie()">
     <option disabled selected value="">Velg film </option>
@@ -17,10 +18,11 @@
     <option>West side story</option>
 </select> <br><br>
 
+<!-- Input for number of tickets -->
 <label for="antallBiletter">Antall:</label>
 <input id="antallBiletter" type="number"><br>
 
-<br>
+<!-- Form for customer information -->
 <form id="kundeListe">
     <label for="fname">Fornavn:</label>
     <input type="text" id="fname" onchange="validateName(this.value)">
@@ -38,29 +40,45 @@
     <input type="text" id="adress" onchange="validateAdress(this.value)">
     <span id="feilAdresse" style="color: red"></span><br>
 
+    <label for="email">Epost:</label>
+    <input type="text" id="email" onchange="validateEmail(this.value)">
+    <span id="feilEmail" style="color: red"></span><br>
+
+    <!-- Button to add buyers -->
     <input type="button" onclick="addBuyers()" value="Kjop billetter"><br>
 </form>
 
 <h2>Alle billeter</h2>
 
+<!-- Container for displaying buyer information -->
 <div id="buyerInfoContainer"></div>
 
+<!-- Button to delete all buyers -->
 <input type="button" onclick="deletePeople()" value="Slett alle biletter">
 
+<!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" type="application/javascript"></script>
 
+<!-- JavaScript code -->
 <script type="text/javascript">
+    // Array to store buyer information
     const buyersList = [];
 
+    // Function to handle movie selection
     function chooseMovie() {
         alert("Movie chosen: " + document.getElementById("selectMovie").value);
     }
 
+    // Function to add buyers
     function addBuyers() {
+        // Retrieving input values
         let name = document.getElementById("fname").value;
         let lname = document.getElementById("lname").value;
         let phone = document.getElementById("phone").value;
         let adress = document.getElementById("adress").value;
+        let email = document.getElementById("adress").value;
+        let movie = document.getElementById("selectMovie").value;
+        let strin1 = document.getElementById("antallBiletter").value;
 
         // Validation
         if (!validateName(name)) {
@@ -75,8 +93,11 @@
         if (!validateAdress(adress)) {
             return;
         }
+        if (!validateEmail(email)) {
+            return;
+        }
 
-        let strin1 = document.getElementById("antallBiletter").value;
+
         let num1 = Number(strin1);
 
         if (isNaN(num1) || num1 <= 0) {
@@ -84,14 +105,18 @@
             return;
         }
 
+        // Creating a person object
         let person = {
             name: name,
             lastname: lname,
             phone: phone,
             address: adress,
-            numTickets: num1
+            email:email,
+            numTickets: num1,
+            movie: movie
         };
 
+        // Adding the person object to the buyersList array
         buyersList.push(person);
 
         // Call visPersonRegister function after adding buyers
@@ -102,11 +127,12 @@
         document.getElementById("lname").value = "";
         document.getElementById("phone").value = "";
         document.getElementById("adress").value = "";
+        document.getElementById("email").value = "";
         document.getElementById("antallBiletter").value = "";
-
+        document.getElementById("selectMovie").value = "";
     }
 
-
+    // Function to validate first name
     function validateName(fname) {
         const regexp = /^[a-zA-ZæøåÆØÅ. \-]{2,20}$/;
         const ok = regexp.test(fname);
@@ -118,6 +144,8 @@
             return true;
         }
     }
+
+    // Function to validate last name
     function validateLastName(lname) {
         const regexp = /^[a-zA-ZæøåÆØÅ. \-]{2,20}$/;
         const ok = regexp.test(lname);
@@ -129,6 +157,8 @@
             return true;
         }
     }
+
+    // Function to validate phone number
     function validatePhone(phone) {
         const regexp = /^[0-9+\s()-]{8,20}$/;
         const ok = regexp.test(phone);
@@ -140,6 +170,8 @@
             return true;
         }
     }
+
+    // Function to validate address
     function validateAdress(address) {
         const regexp = /^[a-zA-Z0-9æøåÆØÅ. \-]{2,50}$/;
         const ok = regexp.test(address);
@@ -151,14 +183,23 @@
             return true;
         }
     }
+    function validateEmail(email) {
+        const regexp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const ok = regexp.test(email);
+        if (!ok) {
+            $("#feilEmail").html("Invalid Email. Please enter a valid email.");
+            return false;
+        } else {
+            $("#feilEmail").html("");
+            return true;
+        }
+    }
 
-
-
-
+    // Function to display buyer information
     function visPersonRegister() {
         let container = document.getElementById("buyerInfoContainer");
         let tableHtml = "<table><tr>" +
-            "<th>Name</th><th>Last Name</th><th>Address</th><th>Phone</th><th>Tickets</th>" +
+            "<th>Name</th><th>Last Name</th><th>Address</th><th>Phone</th><th>Tickets</th><th>Movie</th>" +
             "</tr>";
 
         for (let person of buyersList) {
@@ -168,6 +209,7 @@
                 "<td>" + person.address + "</td>" +
                 "<td>" + person.phone + "</td>" +
                 "<td>" + person.numTickets + "</td>" +
+                "<td>" + person.movie + "</td>" +
                 "</tr>";
         }
 
@@ -175,6 +217,7 @@
         container.innerHTML = tableHtml;
     }
 
+    // Function to delete all buyers
     function deletePeople() {
         while (buyersList.length > 0) {
             buyersList.pop();
