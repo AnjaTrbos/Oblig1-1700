@@ -8,9 +8,10 @@
 
 <body>
 <h1> Bestilling av kinobiletter</h1>
-<!-- Dropdown for selecting movies -->
-<label for="selectMovie">Velg Film:</label>
-<select id="selectMovie" onchange="chooseMovie()">
+
+<!-- Movie selection dropdown -->
+<label for="selectMovie" style="width: 150px; display: inline-block;">Velg Film:</label>
+<select id="selectMovie" onchange="chooseMovie()" style="width: 200px;">
     <option disabled selected value="">Velg film </option>
     <option>Les Miserables</option>
     <option>Mamma mia</option>
@@ -18,40 +19,40 @@
     <option>West side story</option>
 </select> <br><br>
 
-<!-- Input for number of tickets -->
-<label for="antallBiletter">Antall:</label>
-<input id="antallBiletter" type="text" size="1"><br><br>
+<!-- Number of tickets input -->
+<label for="antallBiletter" style="width: 80px; display: inline-block;">Antall:</label>
+<input id="antallBiletter" type="text" size="1" style="width: 50px;"><br><br>
 
 <!-- Form for customer information -->
 <form id="kundeListe">
     <div>
-    <label for="fname">Fornavn:</label>
-    <input type="text" id="fname" onchange="validateName(this.value)">
-    <span id="feilNavn" style="color: red"></span><br>
+        <label for="fname" style="width: 80px; display: inline-block;">Fornavn:</label>
+        <input type="text" id="fname" onchange="validateName(this.value)" style="width: 200px;">
+        <span id="feilNavn" style="color: red"></span><br>
     </div>
 
     <div>
-    <label for="lname">Etternavn:</label>
-    <input type="text" id="lname" onchange="validateLastName(this.value)">
-    <span id="feilEtternavn" style="color: red"></span><br>
+        <label for="lname" style="width: 80px; display: inline-block;">Etternavn:</label>
+        <input type="text" id="lname" onchange="validateLastName(this.value)" style="width: 200px;">
+        <span id="feilEtternavn" style="color: red"></span><br>
     </div>
 
     <div>
-    <label for="phone">Telefonnr:</label>
-    <input type="text" id="phone" onchange="validatePhone(this.value)">
-    <span id="feilTelefon" style="color: red"></span><br>
+        <label for="phone" style="width: 80px; display: inline-block;">Telefonnr:</label>
+        <input type="text" id="phone" onchange="validatePhone(this.value)" style="width: 200px;">
+        <span id="feilTelefon" style="color: red"></span><br>
     </div>
 
     <div>
-    <label for="adress">Adresse:</label>
-    <input type="text" id="adress" onchange="validateAdress(this.value)">
-    <span id="feilAdresse" style="color: red"></span><br>
+        <label for="adress" style="width: 80px; display: inline-block;">Adresse:</label>
+        <input type="text" id="adress" onchange="validateAdress(this.value)" style="width: 200px;">
+        <span id="feilAdresse" style="color: red"></span><br>
     </div>
 
     <div>
-    <label for="email">Epost:</label>
-    <input type="text" id="email" onchange="validateEmail(this.value)">
-    <span id="feilEmail" style="color: red"></span><br><br>
+        <label for="email" style="width: 80px; display: inline-block;">Epost:</label>
+        <input type="text" id="email" onchange="validateEmail(this.value)" style="width: 200px;">
+        <span id="feilEmail" style="color: red"></span><br><br>
     </div>
 
     <!-- Button to add buyers -->
@@ -67,181 +68,10 @@
 <input type="button" onclick="deletePeople()" value="Slett alle biletter">
 
 <!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" type="application/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 <!-- JavaScript code -->
-<script type="text/javascript">
-    // Array to store buyer information
-    const buyersList = [];
-
-    // Function to handle movie selection
-    // I might not need this alert but, I left it just in case
-    function chooseMovie() {
-        alert("Movie chosen: " + document.getElementById("selectMovie").value);
-    }
-
-    // Function to add buyers
-    function addBuyers() {
-        // Retrieving input values
-        let name = document.getElementById("fname").value;
-        let lname = document.getElementById("lname").value;
-        let phone = document.getElementById("phone").value;
-        let adress = document.getElementById("adress").value;
-        let email = document.getElementById("email").value;
-        let movie = document.getElementById("selectMovie").value;
-        let strin1 = document.getElementById("antallBiletter").value;
-
-        // Validation
-        if (!validateName(name)) {
-            return;
-        }
-        if (!validateLastName(lname)) {
-            return;
-        }
-        if (!validatePhone(phone)) {
-            return;
-        }
-        if (!validateAdress(adress)) {
-            return;
-        }
-        if (!validateEmail(email)) {
-            return;
-        }
-
-        //validation for antall
-        // I used an alert here just so the user doesnt waste time on other inputs if this one is not correct
-        let num1 = Number(strin1);
-
-        if (isNaN(num1) || num1 <= 0) {
-            alert("Invalid number of tickets. Please enter a valid number.");
-            return;
-        }
-
-        // Creating a person object
-        //i know its not the best name for it but i couldnt come up with anything else
-        let person = {
-            name: name,
-            lastname: lname,
-            phone: phone,
-            address: adress,
-            email:email,
-            numTickets: num1,
-            movie: movie
-        };
-
-        // Adding the person object to the buyersList array
-        buyersList.push(person);
-
-        // Call visPersonRegister function after adding buyers
-        visPersonRegister();
-
-        // Clear input fields
-        document.getElementById("fname").value = "";
-        document.getElementById("lname").value = "";
-        document.getElementById("phone").value = "";
-        document.getElementById("adress").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("antallBiletter").value = "";
-        document.getElementById("selectMovie").value = "";
-    }
-
-    // Function to validate first name
-    function validateName(fname) {
-        const regexp = /^[a-zA-ZæøåÆØÅ. \-]{2,20}$/;
-        const ok = regexp.test(fname);
-        if (!ok) {
-            $("#feilNavn").html("The name Must consist of 2 to 20 letters");
-            return false;
-        } else {
-            $("#feilNavn").html("");
-            return true;
-        }
-    }
-
-    // Function to validate last name
-    function validateLastName(lname) {
-        const regexp = /^[a-zA-ZæøåÆØÅ. \-]{2,20}$/;
-        const ok = regexp.test(lname);
-        if (!ok) {
-            $("#feilEtternavn").html("The name Must consist of 2 to 20 letters");
-            return false;
-        } else {
-            $("#feilEtternavn").html("");
-            return true;
-        }
-    }
-
-    // Function to validate phone number
-    function validatePhone(phone) {
-        const regexp = /^[0-9+\s()-]{8,20}$/;
-        const ok = regexp.test(phone);
-        if (!ok) {
-            $("#feilTelefon").html("Invalid phone number. Please enter a valid phone number.");
-            return false;
-        } else {
-            $("#feilTelefon").html("");
-            return true;
-        }
-    }
-
-    // Function to validate address
-    function validateAdress(address) {
-        const regexp = /^[a-zA-Z0-9æøåÆØÅ. \-]{2,50}$/;
-        const ok = regexp.test(address);
-        if (!ok) {
-            $("#feilAdresse").html("Invalid address. Please enter a valid address.");
-            return false;
-        } else {
-            $("#feilAdresse").html("");
-            return true;
-        }
-    }
-    // Function to validate email
-    function validateEmail(email) {
-        const regexp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        const ok = regexp.test(email);
-        if (!ok) {
-            $("#feilEmail").html("Invalid Email. Please enter a valid email.");
-            return false;
-        } else {
-            $("#feilEmail").html("");
-            return true;
-        }
-    }
-
-    // Function to display buyer information
-    function visPersonRegister() {
-        let container = document.getElementById("buyerInfoContainer");
-        let tableHtml = "<table><tr>" +
-            "<th>Name</th><th>Last Name</th><th>Address</th><th>Phone</th><th>Email</th><th>Tickets</th><th>Movie</th>" +
-            "</tr>";
-
-        for (let person of buyersList) {
-            tableHtml += "<tr>" +
-                "<td>" + person.name + "</td>" +
-                "<td>" + person.lastname + "</td>" +
-                "<td>" + person.address + "</td>" +
-                "<td>" + person.phone + "</td>" +
-                "<td>" + person.email + "</td>" +
-                "<td>" + person.numTickets + "</td>" +
-                "<td>" + person.movie + "</td>" +
-                "</tr>";
-        }
-
-        tableHtml += "</table>";
-        container.innerHTML = tableHtml;
-    }
-
-    // Function to delete all buyers
-    function deletePeople() {
-        while (buyersList.length > 0) {
-            buyersList.pop();
-        }
-
-        // Update the displayed buyer information
-        visPersonRegister();
-    }
-</script>
+<script type="text/javascript" src="script.js"></script>
 
 </body>
 
