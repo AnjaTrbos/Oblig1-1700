@@ -4,74 +4,111 @@
 <head>
     <meta charset="UTF-8">
     <title>Kinobiletter</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
 </head>
 
 <body>
-<h1> Bestilling av kinobiletter</h1>
+<div class="container">
+    <h1>Bestilling av kinobiletter</h1>
 
-<!-- Movie selection dropdown -->
-<label for="selectMovie" style="width: 150px; display: inline-block;">Velg Film:</label>
-<select id="selectMovie" onchange="chooseMovie()" style="width: 200px;">
-    <option disabled selected value="">Velg film </option>
-    <option>Les Miserables</option>
-    <option>Mamma mia</option>
-    <option>Chicago</option>
-    <option>West side story</option>
-</select> <br><br>
-
-<!-- Number of tickets input -->
-<label for="antallBiletter" style="width: 80px; display: inline-block;">Antall:</label>
-<input id="antallBiletter" type="text" size="1" style="width: 50px;"><br><br>
-
-<!-- Form for customer information -->
-<form id="kundeListe">
-    <div>
-        <label for="fname" style="width: 80px; display: inline-block;">Fornavn:</label>
-        <input type="text" id="fname" onchange="validateName(this.value)" style="width: 200px;">
-        <span id="feilNavn" style="color: red"></span><br>
+    <!-- Movie selection dropdown -->
+    <div class="form-group row">
+        <label for="selectMovie" class="col-sm-2 col-form-label">Velg Film:</label>
+        <div class="col-sm-10">
+            <select id="selectMovie" onchange="validateSelection()" class="form-control">
+                <option disabled selected value="">Velg film</option>
+                <option>Les Miserables</option>
+                <option>Mamma mia</option>
+                <option>Chicago</option>
+                <option>West side story</option>
+            </select>
+            <!-- Validation message -->
+            <span id="feilSelection" style="color: red"></span>
+        </div>
     </div>
 
-    <div>
-        <label for="lname" style="width: 80px; display: inline-block;">Etternavn:</label>
-        <input type="text" id="lname" onchange="validateLastName(this.value)" style="width: 200px;">
-        <span id="feilEtternavn" style="color: red"></span><br>
+    <!-- Number of tickets input -->
+    <div class="form-group row">
+        <label for="antallBiletter" class="col-sm-2 col-form-label">Antall:</label>
+        <div class="col-sm-10">
+            <input id="antallBiletter" type="text" onchange="validateAntall(this.value)" class="form-control" required>
+            <!-- Validation message -->
+            <span id="feilAntall" style="color: red"></span>
+        </div>
     </div>
 
-    <div>
-        <label for="phone" style="width: 80px; display: inline-block;">Telefonnr:</label>
-        <input type="text" id="phone" onchange="validatePhone(this.value)" style="width: 200px;">
-        <span id="feilTelefon" style="color: red"></span><br>
+    <!-- Form for customer information -->
+    <form id="kundeListe">
+        <div class="form-group row">
+            <label for="fname" class="col-sm-2 col-form-label">Fornavn:</label>
+            <div class="col-sm-10">
+                <input type="text" id="fname" onchange="validateName(this.value)" class="form-control" required>
+                <!-- Validation message -->
+                <span id="feilNavn" style="color: red"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="lname" class="col-sm-2 col-form-label">Etternavn:</label>
+            <div class="col-sm-10">
+                <input type="text" id="lname"  onchange="validateLastName(this.value)" class="form-control" required>
+                <!-- Validation message -->
+                <span id="feilEtternavn" style="color: red"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="phone" class="col-sm-2 col-form-label">Telefonnr:</label>
+            <div class="col-sm-10">
+                <input type="text" id="phone" onchange="validatePhone(this.value)" class="form-control" required>
+                <!-- Validation message -->
+                <span id="feilTelefon" style="color: red"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="adress" class="col-sm-2 col-form-label">Adresse:</label>
+            <div class="col-sm-10">
+                <input type="text" id="adress" onchange="validateAdress(this.value)" class="form-control" required>
+                <!-- Validation message -->
+                <span id="feilAdresse" style="color: red"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label">Epost:</label>
+            <div class="col-sm-10">
+                <input type="text" id="email" onchange="validateEmail(this.value)" class="form-control" required>
+                <!-- Validation message -->
+                <span id="feilEmail" style="color: red"></span>
+            </div>
+        </div>
+
+        <!-- Button to add buyers -->
+        <div class="form-group row">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="button" class="btn btn-info" onclick="addBuyers()">Kjøp billetter</button>
+            </div>
+        </div>
+    </form>
+
+    <h2>Alle billetter</h2>
+
+    <!-- Container for displaying buyer information<div id="buyerInfoContainer" onchange="getTickets()"></div> -->
+    <div id="ticketInfoContainer"></div>
+    <br>
+
+    <div class="form-group row">
+        <div class="col-sm-10 offset-sm-2">
+            <button type="button" class="btn btn-danger" onclick="deleteTickets()">Slett alle billetter</button>
+        </div>
     </div>
-
-    <div>
-        <label for="adress" style="width: 80px; display: inline-block;">Adresse:</label>
-        <input type="text" id="adress" onchange="validateAdress(this.value)" style="width: 200px;">
-        <span id="feilAdresse" style="color: red"></span><br>
-    </div>
-
-    <div>
-        <label for="email" style="width: 80px; display: inline-block;">Epost:</label>
-        <input type="text" id="email" onchange="validateEmail(this.value)" style="width: 200px;">
-        <span id="feilEmail" style="color: red"></span><br><br>
-    </div>
-
-    <!-- Button to add buyers -->
-    <input type="button" onclick="addBuyers()" value="Kjop billetter">
-</form>
-
-<h2>Alle billeter</h2>
-
-<!-- Container for displaying buyer information -->
-<div id="buyerInfoContainer"></div>
-
-<!-- Button to delete all buyers -->
-<input type="button" onclick="deletePeople()" value="Slett alle biletter">
-
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-<!-- JavaScript code -->
-<script type="text/javascript" src="script.js"></script>
+</div>
 
 </body>
 
