@@ -1,77 +1,90 @@
-// Array to store buyer information
-const buyersList = [];
-
-// Function to handle movie selection
-function chooseMovie() {
-    alert("Movie chosen: " + document.getElementById("selectMovie").value);
-}
-
-// Function to add buyers
+// Function to add a ticket buyer
 function addBuyers() {
-    // Retrieving input values
-    let name = document.getElementById("fname").value;
-    let lname = document.getElementById("lname").value;
-    let phone = document.getElementById("phone").value;
-    let adress = document.getElementById("adress").value;
-    let email = document.getElementById("email").value; // Note: Fix this line
-    let movie = document.getElementById("selectMovie").value;
-    let strin1 = document.getElementById("antallBiletter").value;
-
-    // Validation
-    if (!validateName(name)) {
-        return;
-    }
-    if (!validateLastName(lname)) {
-        return;
-    }
-    if (!validatePhone(phone)) {
-        return;
-    }
-    if (!validateAdress(adress)) {
-        return;
-    }
-    if (!validateEmail(email)) {
-        return;
-    }
-
-    //validation for antall
-    // I used an alert here just so the user doesnt waste time on other inputs if this one is not correct
-    let num1 = Number(strin1);
-
-    if (isNaN(num1) || num1 <= 0) {
-        alert("Invalid number of tickets. Please enter a valid number.");
-        return;
-    }
-
-    // Creating a person object
-    //i know its not the best name for it but i couldnt come up with anything else
-    let person = {
-        name: name,
-        lastname: lname,
-        phone: phone,
-        address: adress,
-        email: email,
-        numTickets: num1,
-        movie: movie
+    // Get ticket data from form fields
+    const ticket = {
+        fname: $("#fname").val(),
+        lname: $("#lname").val(),
+        phone: $("#phone").val(),
+        adress: $("#adress").val(),
+        email: $("#email").val(),
+        antallBiletter: $("#antallBiletter").val(),
+        selectMovie: $("#selectMovie").val(),
     };
 
-    // Adding the person object to the buyersList array
-    buyersList.push(person);
-
-    // Call visPersonRegister function after adding buyers
-    visPersonRegister();
-
-    // Clear input fields
-    document.getElementById("fname").value = "";
-    document.getElementById("lname").value = "";
-    document.getElementById("phone").value = "";
-    document.getElementById("adress").value = "";
-    document.getElementById("email").value = "";
-    document.getElementById("antallBiletter").value = "";
-    document.getElementById("selectMovie").value = "";
+    // Send the ticket data to the server using jQuery AJAX POST request
+    $.post("/saveTicket", ticket, function () {
+        // After successful addition, retrieve and display updated ticket information
+        getTickets();
+    });
 }
 
-// Function to validate first name
+// Function to retrieve ticket information from the server
+function getTickets(){
+    $.get("/getTicket", function (data) {
+        // Format and display ticket information
+        formatData(data);
+    });
+    // Clear form fields after retrieving ticket information
+    $("#fname").val('');
+    $("#lname").val('');
+    $("#phone").val('');
+    $("#adress").val('');
+    $("#email").val('');
+    $("#antallBiletter").val('');
+    $("#selectMovie").val('');
+}
+
+// Function to format ticket data into HTML table format
+function formatData(tickets) {
+    let ut = "<table class='table table-striped table-bordered'><thead><tr>" +
+        "<th scope='col'>Name</th><th scope='col'>Last Name</th><th scope='col'>Address</th><th scope='col'>Phone</th><th scope='col'>Email</th><th scope='col'>Tickets</th><th scope='col'>Movie</th>" +
+        "</tr></thead><tbody>";
+    for (const ticket of tickets) {
+        ut += "<tr><td>" + ticket.fname + "</td><td>" + ticket.lname + "</td>" +
+            "<td>" + ticket.phone + "</td><td>" + ticket.adress + "</td><td>" + ticket.email + "</td>" +
+            "<td>" + ticket.antallBiletter + "</td><td>" + ticket.selectMovie + "</td></tr>";
+    }
+    ut += "</tbody></table>";
+    // Display formatted ticket information in the ticketInfoContainer element
+    $("#ticketInfoContainer").html(ut);
+}
+
+// Function to delete all tickets
+function deleteTickets() {
+    // Send a request to the server to delete all tickets
+    $.get( "/deleteTicket", function() {
+        // After successful deletion, retrieve and display updated ticket information
+        getTickets();
+    });
+}
+
+// Function to validate movie selection
+function validateSelection() {
+    const movie = $("#selectMovie").val();
+    if (movie === "") {
+        // Display error message if no movie is selected
+        $("#feilSelection").html("Choose a movie");
+        return false;
+    } else {
+        // Clear error message if a movie is selected
+        $("#feilSelection").html(" ");
+        return true;
+    }
+}
+
+//function to validate number of tickets
+function validateAntall(antallBilleter) {
+    const regex = /^[1-9]*$/;// Regex to ensure that the input contains only digits (1-9)
+    const ok = regex.test(antallBilleter);
+    if (!ok) {
+        $("#feilAntall").html( "Please put the number of tickets as number from 1 to 9");
+        return false;
+    } else {
+        $("#feilAntall").html( " ");
+        return true;
+    }
+}
+// function to validate name
 function validateName(fname) {
     const regexp = /^[a-zA-ZæøåÆØÅ. \-]{2,20}$/;
     const ok = regexp.test(fname);
@@ -83,7 +96,6 @@ function validateName(fname) {
         return true;
     }
 }
-
 // Function to validate last name
 function validateLastName(lname) {
     const regexp = /^[a-zA-ZæøåÆØÅ. \-]{2,20}$/;
@@ -96,7 +108,6 @@ function validateLastName(lname) {
         return true;
     }
 }
-
 // Function to validate phone number
 function validatePhone(phone) {
     const regexp = /^[0-9+\s()-]{8,20}$/;
@@ -109,7 +120,6 @@ function validatePhone(phone) {
         return true;
     }
 }
-
 // Function to validate address
 function validateAdress(address) {
     const regexp = /^[a-zA-Z0-9æøåÆØÅ. \-]{2,50}$/;
@@ -134,37 +144,4 @@ function validateEmail(email) {
         $("#feilEmail").html("");
         return true;
     }
-}
-
-// Function to display buyer information
-function visPersonRegister() {
-    let container = document.getElementById("buyerInfoContainer");
-    let tableHtml = "<table><tr>" +
-        "<th>Name</th><th>Last Name</th><th>Address</th><th>Phone</th><th>Email</th><th>Tickets</th><th>Movie</th>" +
-        "</tr>";
-
-    for (let person of buyersList) {
-        tableHtml += "<tr>" +
-            "<td>" + person.name + "</td>" +
-            "<td>" + person.lastname + "</td>" +
-            "<td>" + person.address + "</td>" +
-            "<td>" + person.phone + "</td>" +
-            "<td>" + person.email + "</td>" +
-            "<td>" + person.numTickets + "</td>" +
-            "<td>" + person.movie + "</td>" +
-            "</tr>";
-    }
-
-    tableHtml += "</table>";
-    container.innerHTML = tableHtml;
-}
-
-// Function to delete all buyers
-function deletePeople() {
-    while (buyersList.length > 0) {
-        buyersList.pop();
-    }
-
-    // Update the displayed buyer information
-    visPersonRegister();
 }
