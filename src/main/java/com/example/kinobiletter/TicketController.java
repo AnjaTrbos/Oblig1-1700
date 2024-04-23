@@ -14,18 +14,33 @@ public class TicketController {
     TicketRepository rep;
 
     @PostMapping("/saveTicket")
-    public void returnTicket(Ticket inTicket) {
-        rep.saveTicket(inTicket);
+    public void saveTicket(Ticket ticket) {
+        rep.saveTicket(ticket);
     }
     @GetMapping("/getTicket")
-    public List<Ticket> getTickets(){
-        return rep.getTickets();
+    public List<Ticket> getAllTickets(){
+        return rep.getAllTickets();
     }
-    @GetMapping("/deleteTicket")
+    @GetMapping("/getOneTicket")
+    public Ticket getOneTicket(int id){
+        return rep.getOneTicket(id);
+    }
+    @PostMapping("/updateTicket")
+    public void updateTicket(Ticket ticket) {
+        rep.updateTicket(ticket);
+    }
+
+    @GetMapping ("/deleteOneTicket")
+    public void deleteOneTicket(int id){
+        rep.deleteOneTicket(id);
+    }
+    @GetMapping ("/deleteTickets")
     public void deleteTickets(){
         rep.deleteTickets();
     }
+
 }
+
 
 
 

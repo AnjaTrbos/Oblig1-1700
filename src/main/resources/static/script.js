@@ -1,6 +1,31 @@
-// Function to add a ticket buyer
-function addBuyers() {
-    // Get ticket data from form fields
+// Function to add a ticket
+$(function(){
+    getAllTickets();
+});
+function getAllTickets() {
+    $.get( "/getTicket", function( tickets ) {
+        formatData(tickets);
+    });
+}
+// format the data we recive as a table
+function formatData(tickets) {
+    let ut = "<table class='table table-striped table-bordered'><thead><tr>" +
+        "<th scope='col'>Name</th><th scope='col'>Last Name</th><th scope='col'>Address</th><th scope='col'>Phone</th><th scope='col'>Email</th><th scope='col'>Tickets</th><th scope='col'>Movie</th><th scope='col'>Actions</th>" +
+        "</tr></thead><tbody>";
+    for (const ticket of tickets) {
+        ut += "<tr><td>" + ticket.fname + "</td><td>" + ticket.lname + "</td>" +
+            "<td>" + ticket.adress + "</td><td>" + ticket.phone + "</td><td>" + ticket.email + "</td>" +
+            "<td>" + ticket.antallBiletter + "</td><td>" + ticket.selectMovie + "</td>" +
+            "<td> <a class='btn btn-primary' href='updateTicket.html?id="+ ticket.id + "'>Edit</a></td>" +
+            "<td> <button class='btn btn-danger' onclick='deleteOneTicket(" + ticket.id + ")'>Delete</button></td>" +
+            "</tr>";
+    }
+    ut += "</tbody></table>";
+    // Display formatted ticket information in the ticketInfoContainer element
+    $("#ticketInfoContainer").html(ut);
+}
+
+function saveTicket() {
     const ticket = {
         fname: $("#fname").val(),
         lname: $("#lname").val(),
@@ -11,52 +36,28 @@ function addBuyers() {
         selectMovie: $("#selectMovie").val(),
     };
 
-    // Send the ticket data to the server using jQuery AJAX POST request
     $.post("/saveTicket", ticket, function () {
         // After successful addition, retrieve and display updated ticket information
-        getTickets();
+        getAllTickets();
     });
 }
 
-// Function to retrieve ticket information from the server
-function getTickets(){
-    $.get("/getTicket", function (data) {
-        // Format and display ticket information
-        formatData(data);
+
+// Function to delete all tickets, could not get it to work with delete mapping for some reason
+function deleteOneTicket(id) {
+    const url = "/deleteOneTicket?id="+id;
+    $.get( url, function() {
+        getAllTickets();
     });
-    // Clear form fields after retrieving ticket information
-    $("#fname").val('');
-    $("#lname").val('');
-    $("#phone").val('');
-    $("#adress").val('');
-    $("#email").val('');
-    $("#antallBiletter").val('');
-    $("#selectMovie").val('');
 }
-
-// Function to format ticket data into HTML table format
-function formatData(tickets) {
-    let ut = "<table class='table table-striped table-bordered'><thead><tr>" +
-        "<th scope='col'>Name</th><th scope='col'>Last Name</th><th scope='col'>Address</th><th scope='col'>Phone</th><th scope='col'>Email</th><th scope='col'>Tickets</th><th scope='col'>Movie</th>" +
-        "</tr></thead><tbody>";
-    for (const ticket of tickets) {
-        ut += "<tr><td>" + ticket.fname + "</td><td>" + ticket.lname + "</td>" +
-            "<td>" + ticket.phone + "</td><td>" + ticket.adress + "</td><td>" + ticket.email + "</td>" +
-            "<td>" + ticket.antallBiletter + "</td><td>" + ticket.selectMovie + "</td></tr>";
-    }
-    ut += "</tbody></table>";
-    // Display formatted ticket information in the ticketInfoContainer element
-    $("#ticketInfoContainer").html(ut);
-}
-
-// Function to delete all tickets
 function deleteTickets() {
     // Send a request to the server to delete all tickets
-    $.get( "/deleteTicket", function() {
+    $.get( "/deleteTickets", function() {
         // After successful deletion, retrieve and display updated ticket information
-        getTickets();
+        getAllTickets();
     });
 }
+
 
 // Function to validate movie selection
 function validateSelection() {

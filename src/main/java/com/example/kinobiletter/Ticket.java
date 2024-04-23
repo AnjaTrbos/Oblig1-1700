@@ -1,6 +1,7 @@
 package com.example.kinobiletter;
 
 public class Ticket {
+    private int id;
     private String selectMovie;
     private String antallBiletter;
     private String fname;
@@ -9,8 +10,9 @@ public class Ticket {
     private String phone;
     private String email;
 
-    public Ticket(String selectMovie, String antallBiletter, String fname,
+    public Ticket(int id, String selectMovie, String antallBiletter, String fname,
                   String lname, String adress, String phone, String email) {
+        this.id = id;
         this.selectMovie = selectMovie;
         this.antallBiletter = antallBiletter;
         this.fname = fname;
@@ -19,7 +21,18 @@ public class Ticket {
         this.phone = phone;
         this.email = email;
     }
-    public Ticket (){}
+    public Ticket (){
+
+    }
+    // Getters and setters for all fields, including id
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getSelectMovie() {
         return selectMovie;
@@ -77,4 +90,6 @@ public class Ticket {
         this.email = email;
     }
 }
+
+
 

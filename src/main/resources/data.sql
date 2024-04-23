@@ -1,0 +1,3 @@
+INSERT INTO Ticket (fname, lname, phone, email, adress, selectMovie, antallBiletter) VALUES ( 'Kendall','Roy',1234567,'kenny@waystar.com','Manhatn 1','Les Miserables', 3 );
+INSERT INTO Ticket (fname, lname, phone, email, adress, selectMovie, antallBiletter) VALUES ( 'Tom','Wambsgans',7777777,'tomlet@waystar.com','Sioban st. 1','Les Miserables', 1 );
+INSERT INTO Ticket (fname, lname, phone, email, adress, selectMovie, antallBiletter) VALUES ( 'Gregory','Hirsh',7654321,'gregg@waystar.com','Staten Island 24','Mamma Mia', 2 );
