@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="no">
-
 <head>
     <meta charset="UTF-8">
     <title>Kinobiletter</title>
@@ -11,7 +10,6 @@
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
 </head>
-
 <body>
 <div class="container">
     <h1>Bestilling av kinobiletter</h1>
@@ -44,6 +42,7 @@
 
     <!-- Form for customer information -->
     <form id="kundeListe">
+        <input type="hidden" id="ticketId" name="ticketId">
         <div class="form-group row">
             <label for="fname" class="col-sm-2 col-form-label">Fornavn:</label>
             <div class="col-sm-10">
@@ -89,20 +88,21 @@
             </div>
         </div>
 
-        <!-- Button to add buyers -->
+        <!-- Button to add ticket info -->
         <div class="form-group row">
             <div class="col-sm-10 offset-sm-2">
-                <button type="button" class="btn btn-info" onclick="addBuyers()">Kjøp billetter</button>
+                <button type="button" class="btn btn-info" onclick="saveTicket()">Buy tickets</button>
             </div>
         </div>
     </form>
 
     <h2>Alle billetter</h2>
 
-    <!-- Container for displaying buyer information<div id="buyerInfoContainer" onchange="getTickets()"></div> -->
+    <!-- Container for displaying buyer information-->
     <div id="ticketInfoContainer"></div>
     <br>
 
+    <!-- Button to delete all tickets-->
     <div class="form-group row">
         <div class="col-sm-10 offset-sm-2">
             <button type="button" class="btn btn-danger" onclick="deleteTickets()">Slett alle billetter</button>
